@@ -1,54 +1,59 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
-import { TouchableOpacity } from "react-native";
-import UserService from "../../api/userService";
-import { useAuth } from "../../hooks/useAuth";
-import { styles } from "../../style/authStyles";
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import UserService from '../../api/userService';
+import { useAuth } from '../../hooks/useAuth';
+import { styles } from '../../style/authStyles';
 
-import { Link } from "../../components/UI/Link/Link";
-import { Button } from "../../components/UI/Button/Button";
-import { Loader } from "../../components/UI/Loader/Loader";
+import { Link } from '../../components/UI/Link/Link';
+import { Button } from '../../components/UI/Button/Button';
+import { Loader } from '../../components/UI/Loader/Loader';
 
 export const Login = ({ navigation }) => {
   const auth = useAuth();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const pressHandler = async () => {
-    try {
-      setIsLoading(true);
-      const response = await UserService.login(login, password);
-      if (response.status == 200) {
-        auth.setToken(response.data.token);
-        auth.setUser(response.data.user);
-      }
-    } catch (e) {
-      setError("Login error");
-    }
+    // try {
+    //   setIsLoading(true);
+    //   const response = await UserService.login(login, password);
+    //   if (response.status == 200) {
+    //     auth.setToken(response.data.token);
+    //     auth.setUser(response.data.user);
+    //   }
+    // } catch (e) {
+    //   setError('Login error');
+    // }
+    auth.setToken('token');
+    auth.setUser({ name: 'John' });
   };
 
-  const [login, setLogin] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [login, setLogin] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   return (
     <View style={styles.root}>
-      <View style={styles.header}></View>
+      <View style={styles.header}>
+        <Text style={styles.title}>Table Booking</Text>
+        <Text style={styles.subtitle}>
+          Зарегистрируйся чтобы пользоваться уникальным сервисом
+        </Text>
+      </View>
       <View style={styles.menu}>
         <View style={styles.links}>
           <View style={styles.active}>
             <Link
               style={styles.link}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate('Login')}
             >
               Вход
             </Link>
           </View>
           <View>
-            <Link
+            {/* <Link
               style={styles.link}
-              onPress={() => navigation.navigate("Register")}
-            >
-              Регистрация
-            </Link>
+              onPress={() => navigation.navigate('Register')}
+            ></Link> */}
           </View>
         </View>
         <View style={styles.form}>
@@ -60,30 +65,31 @@ export const Login = ({ navigation }) => {
               onChange={(e) => {
                 setLogin(e.nativeEvent.text);
               }}
-              placeholder="Ваш номер телефона"
-              keyboardType="phone-pad"
+              placeholder='Ваш номер телефона'
+              keyboardType='phone-pad'
             />
           </View>
           <View style={styles.inputView}>
-            <Text style={styles.textInput}>Пароль</Text>
+            <Text style={styles.textInput}>Код</Text>
             <TextInput
               style={styles.input}
               value={password}
               onChange={(e) => {
                 setPassword(e.nativeEvent.text);
               }}
-              placeholder="Ваш пароль"
-              textContentType="password"
+              placeholder='Ваш пароль'
+              textContentType='password'
               secureTextEntry={true}
-              autoCapitalize="none"
+              autoCapitalize='none'
               autoCorrect={false}
+              editable={false}
             />
           </View>
           <View style={styles.forgotPassword}>
             <Link style={styles.forgotPasswordText}>Забыли пароль ?</Link>
           </View>
           <View style={styles.loginButton}>
-            <Button onPress={pressHandler}>Войти</Button>
+            <Button onPress={pressHandler}>Получить код</Button>
           </View>
         </View>
         {isLoading && <Loader />}

@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
-import UserService from "../api/userService";
-import { AuthContext } from "../context";
+import { useState, useCallback, useEffect, useMemo } from 'react';
+import UserService from '../api/userService';
+import { AuthContext } from '../context';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -14,9 +14,9 @@ export const AuthProvider = (props) => {
     console.log('setted');
 
     if (tokenData) {
-      AsyncStorage.setItem("token", tokenData);
+      AsyncStorage.setItem('token', tokenData);
     } else {
-      AsyncStorage.removeItem("token");
+      AsyncStorage.removeItem('token');
     }
   }, []);
 
@@ -26,12 +26,12 @@ export const AuthProvider = (props) => {
   }, [setToken]);
 
   const loadData = useCallback(async () => {
-    const tokenData = await AsyncStorage.getItem("token");
+    const tokenData = await AsyncStorage.getItem('token');
     setTokenData(tokenData);
 
     try {
       if (tokenData) {
-        const user  = await UserService.getUser(tokenData);
+        const user = await UserService.getUser(tokenData);
         setUser(user);
       }
     } catch (e) {
