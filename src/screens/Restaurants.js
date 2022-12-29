@@ -4,58 +4,64 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  ScrollView,
   TouchableOpacity,
-} from "react-native";
-import offer from "../static/img/res3.jpeg";
-import { SearchBar } from "../components/UI/SearchBar/SearchBar";
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
+import { SearchBar } from '../components/UI/SearchBar/SearchBar';
+import React, { useEffect, useState } from 'react';
+import { useRestaurants } from '../hooks/useRestaurants';
 
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 export const Restaurants = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    useRestaurants(setRestaurants, setIsLoading);
+  }, []);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    useRestaurants(setRestaurants, setIsLoading);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   return (
     <View style={styles.root}>
       <SearchBar
         onPress={() => {
-          navigation.navigate("Search");
+          navigation.navigate('Search');
         }}
       />
       <View style={styles.offer}>
-        <FlatList
-          data={[
-            {
-              id: "1",
-              name: "Restaurant 1",
-              image: offer,
-            },
-            {
-              id: "2",
-              name: "Restaurant 2",
-              image: offer,
-            },
-            {
-              id: "3",
-              name: "Restaurant 3",
-              image: offer,
-            },
-            {
-              id: "4",
-              name: "Restaurant 4",
-              image: offer,
-            },
-          ]}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("detail", { item });
-              }}
-            >
-              <Image style={styles.image} source={item.image} />
-              <Text>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        {isLoading ? (
+          <ActivityIndicator size='large' color='#DE3905' />
+        ) : (
+          <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            data={restaurants}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('detail', { item });
+                }}
+              >
+                <Image style={styles.image} source={item.image} />
+                <Text>{item.title}</Text>
+              </TouchableOpacity>
+            )}
+            horizontal={false}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            style={{ height: '100%' }}
+          />
+        )}
       </View>
     </View>
   );
@@ -75,6 +81,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   scroll: {
-    height: "100%",
+    height: '100%',
   },
 });

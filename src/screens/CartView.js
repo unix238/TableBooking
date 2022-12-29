@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,157 +7,157 @@ import {
   FlatList,
   ScrollView,
   TouchableOpacity,
-} from "react-native";
-import { useAuth } from "../hooks/useAuth";
-import { Ionicons } from "@expo/vector-icons";
-import { SearchBar } from "../components/UI/SearchBar/SearchBar";
-import { AntDesign } from "@expo/vector-icons";
+} from 'react-native';
+import { useAuth } from '../hooks/useAuth';
+import { Ionicons } from '@expo/vector-icons';
+import { SearchBar } from '../components/UI/SearchBar/SearchBar';
+import { AntDesign } from '@expo/vector-icons';
 
-import res1 from "../static/img/res1.jpeg";
-import res2 from "../static/img/res2.jpeg";
-import res3 from "../static/img/res3.jpeg";
-import food1 from "../static/img/food1.png";
-import food2 from "../static/img/food2.png";
+import res1 from '../static/img/res1.jpeg';
+import res2 from '../static/img/res2.jpeg';
+import res3 from '../static/img/res3.jpeg';
+import food1 from '../static/img/food1.png';
+import food2 from '../static/img/food2.png';
 
-import offer from "../static/img/offer.jpeg";
-import { TextInput } from "react-native-gesture-handler";
+import offer from '../static/img/offer.jpeg';
+import { TextInput } from 'react-native-gesture-handler';
 const resData = [
   {
-    id: "1",
-    name: "The FLoat",
+    id: '1',
+    name: 'The FLoat',
     image: res1,
-    location: "Центральный парк отдыха",
+    location: 'Центральный парк отдыха',
   },
   {
-    id: "2",
+    id: '2',
     name: "Mama's Kitchen",
     image: res2,
-    location: "ул. Ауэзова, 109",
+    location: 'ул. Ауэзова, 109',
   },
   {
-    id: "3",
-    name: "Turandot",
+    id: '3',
+    name: 'Turandot',
     image: res3,
-    location: "пр. Абая, 157 А, уг. ул. Розыбакиева",
+    location: 'пр. Абая, 157 А, уг. ул. Розыбакиева',
   },
 ];
 const foodData = [
   {
-    id: "1",
-    name: "Chicken Biryani",
+    id: '1',
+    name: 'Chicken Biryani',
     image: food1,
-    price: "1500",
-    desc: "Chicken, rice, curry, salad",
-    rest: "The FLoat",
+    price: '1500',
+    desc: 'Chicken, rice, curry, salad',
+    rest: 'The FLoat',
   },
   {
-    id: "2",
-    name: "Sauce Tonkatsu",
+    id: '2',
+    name: 'Sauce Tonkatsu',
     image: food2,
-    price: "1200",
-    desc: "Chicken, rice, curry, salad",
+    price: '1200',
+    desc: 'Chicken, rice, curry, salad',
     rest: "Mama's Kitchen",
   },
   {
-    id: "3",
-    name: "Chicken Sauce",
+    id: '3',
+    name: 'Chicken Sauce',
     image: food1,
-    price: "1600",
-    desc: "Chicken, rice, curry, salad",
-    rest: "Turandot",
+    price: '1600',
+    desc: 'Chicken, rice, curry, salad',
+    rest: 'Turandot',
   },
 ];
 const foodData2 = [
   {
-    id: "4",
-    name: "Sauce Biryani",
+    id: '4',
+    name: 'Sauce Biryani',
     image: food2,
-    price: "1800",
-    desc: "Chicken, rice, curry, salad",
-    rest: "The FLoat",
+    price: '1800',
+    desc: 'Chicken, rice, curry, salad',
+    rest: 'The FLoat',
   },
   {
-    id: "5",
-    name: "Sauce Tonkatsu",
+    id: '5',
+    name: 'Sauce Tonkatsu',
     image: food1,
-    price: "1400",
-    desc: "Chicken, rice, curry, salad",
+    price: '1400',
+    desc: 'Chicken, rice, curry, salad',
     rest: "Mama's Kitchen",
   },
   {
-    id: "6",
-    name: "Chicken Tonkatsu",
+    id: '6',
+    name: 'Chicken Tonkatsu',
     image: food2,
-    price: "1600",
-    desc: "Chicken, rice, curry, salad",
-    rest: "Turandot",
+    price: '1600',
+    desc: 'Chicken, rice, curry, salad',
+    rest: 'Turandot',
   },
   {
-    id: "7",
-    name: "Sauce Biryani",
+    id: '7',
+    name: 'Sauce Biryani',
     image: food2,
-    price: "1800",
-    desc: "Chicken, rice, curry, salad",
-    rest: "The FLoat",
+    price: '1800',
+    desc: 'Chicken, rice, curry, salad',
+    rest: 'The FLoat',
   },
   {
-    id: "8",
-    name: "Sauce Tonkatsu",
+    id: '8',
+    name: 'Sauce Tonkatsu',
     image: food1,
-    price: "1400",
-    desc: "Chicken, rice, curry, salad",
+    price: '1400',
+    desc: 'Chicken, rice, curry, salad',
     rest: "Mama's Kitchen",
   },
   {
-    id: "9",
-    name: "Chicken Tonkatsu",
+    id: '9',
+    name: 'Chicken Tonkatsu',
     image: food2,
-    price: "1600",
-    desc: "Chicken, rice, curry, salad",
-    rest: "Turandot",
+    price: '1600',
+    desc: 'Chicken, rice, curry, salad',
+    rest: 'Turandot',
   },
 ];
 const foodData3 = [
   {
-    id: "10",
-    name: "Sauce Biryani",
+    id: '10',
+    name: 'Sauce Biryani',
     image: food2,
-    price: "1800",
-    desc: "Chicken, rice, curry, salad",
-    rest: "The FLoat",
+    price: '1800',
+    desc: 'Chicken, rice, curry, salad',
+    rest: 'The FLoat',
   },
   {
-    id: "11",
-    name: "Chicken Tonkatsu",
+    id: '11',
+    name: 'Chicken Tonkatsu',
     image: food2,
-    price: "1600",
-    desc: "Chicken, rice, curry, salad",
-    rest: "Turandot",
+    price: '1600',
+    desc: 'Chicken, rice, curry, salad',
+    rest: 'Turandot',
   },
   {
-    id: "12",
-    name: "Sauce Tonkatsu",
+    id: '12',
+    name: 'Sauce Tonkatsu',
     image: food1,
-    price: "1400",
-    desc: "Chicken, rice, curry, salad",
+    price: '1400',
+    desc: 'Chicken, rice, curry, salad',
     rest: "Mama's Kitchen",
   },
 ];
 
 const foodCategories = [
   {
-    id: "q",
-    name: "Комбо",
+    id: 'q',
+    name: 'Комбо',
     foodList: foodData,
   },
   {
-    id: "qs",
-    name: "Супы",
+    id: 'qs',
+    name: 'Супы',
     foodList: foodData2,
   },
   {
-    id: "qsw",
-    name: "Горячие блюда",
+    id: 'qsw',
+    name: 'Горячие блюда',
     foodList: foodData3,
   },
 ];
@@ -178,10 +178,10 @@ export const CartView = ({ navigation, route }) => {
     }
   };
 
-  const getCount = (id = "first") => {
+  const getCount = (id = 'first') => {
     let count = 0;
     console.log(id);
-    if (id === "first") {
+    if (id === 'first') {
       return 1;
     }
     for (let i = 0; i < newBasket.length; i++) {
@@ -218,7 +218,7 @@ export const CartView = ({ navigation, route }) => {
                     remove(food.id);
                   }}
                 >
-                  <AntDesign name="minus" size={24} color="black" />
+                  <AntDesign name='minus' size={24} color='black' />
                 </TouchableOpacity>
                 <Text>{getCount(food.id)}</Text>
                 <TouchableOpacity
@@ -227,7 +227,7 @@ export const CartView = ({ navigation, route }) => {
                     add(food);
                   }}
                 >
-                  <AntDesign name="plus" size={24} color="black" />
+                  <AntDesign name='plus' size={24} color='black' />
                 </TouchableOpacity>
               </View>
             </View>
@@ -241,7 +241,7 @@ export const CartView = ({ navigation, route }) => {
                 onPress={() => {}}
                 style={styles.sectionFoodItemAddButton}
               >
-                <Ionicons name="ios-add-circle" size={24} color="#DE3905" />
+                <Ionicons name='ios-add-circle' size={24} color='#DE3905' />
               </TouchableOpacity>
             </View>
           </View>
@@ -270,19 +270,19 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 22,
-    fontWeight: "bold",
-    color: "#DE3905",
+    fontWeight: 'bold',
+    color: '#DE3905',
   },
   flatList: {
-    height: "100%",
+    height: '100%',
   },
   sectionFoodItem: {
     paddingHorizontal: 18,
-    display: "flex",
-    justifyContent: "space-between",
-    flexDirection: "row",
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     marginBottom: 10,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
   },
   sectionFoodItemImageView: {
@@ -290,13 +290,13 @@ const styles = StyleSheet.create({
     height: 70,
   },
   sectionFoodItemImage: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     borderRadius: 10,
   },
   sectionFoodItemInfo: {
-    width: "60%",
-    height: "100%",
+    width: '60%',
+    height: '100%',
     paddingVertical: 10,
   },
   sectionFoodItemInfoTitle: {
@@ -304,73 +304,73 @@ const styles = StyleSheet.create({
   },
   sectionFoodItemInfoTitleText: {
     fontSize: 14,
-    fontWeight: "400",
+    fontWeight: '400',
   },
   sectionFoodItemInfoSubTitle: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "30%",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '30%',
   },
   plus: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    borderStyle: "dashed",
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     marginLeft: 5,
   },
   minus: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    borderStyle: "dashed",
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderStyle: 'dashed',
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     marginRight: 5,
   },
   sectionFoodItemInfoSubTitleText: {
     fontSize: 12,
-    fontWeight: "400",
-    color: "#8E8E93",
+    fontWeight: '400',
+    color: '#8E8E93',
   },
   sectionFoodItemActiveSide: {
-    width: "10%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
+    width: '10%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   sectionFoodItemPrice: {},
   sectionFoodItemPriceText: {
     fontSize: 14,
-    fontWeight: "400",
-    color: "#DE3905",
+    fontWeight: '400',
+    color: '#DE3905',
   },
   sectionFoodItemAddButton: {
     paddingBottom: 20,
   },
   payButton: {
-    backgroundColor: "#DE3905",
-    position: "absolute",
+    backgroundColor: '#DE3905',
+    position: 'absolute',
     height: 40,
     width: 150,
-    top: "90%",
-    left: "35%",
-    textAlign: "center",
+    top: '90%',
+    left: '35%',
+    textAlign: 'center',
     borderRadius: 10,
   },
   payButtonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingTop: 10,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
