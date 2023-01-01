@@ -2,41 +2,85 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from '../../components/UI/Link/Link';
+import RestaurantsService from '../../api/restaurantService';
+import DetailMenuCard from '../../components/UI/DetailMenuCard/DetailMenuCard';
+import { Loader } from '../../components/UI/Loader/Loader';
 
 export const RestaurantDetail = ({ navigation, route }) => {
   const [item, setItem] = useState(route.params.item);
+  const [isLoading, setIsLoading] = useState(true);
+  const [foods, setFoods] = useState([]);
+
+  const loadFood = async () => {
+    try {
+      let response = await RestaurantsService.getFoodItems(item._id);
+      setIsLoading(true);
+      setFoods(response.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadFood();
+    // console.log(item);
+  });
+
   return (
-    <ScrollView style={styles.root}>
-      <View style={styles.resCard}>
-        <View style={styles.resInfo}>
-          <Text style={styles.resTitle}>{item.title}</Text>
-          <Text style={styles.resSubTitle}>
-            <Ionicons
-              name='ios-location-sharp'
-              size={16}
-              color='#DE3905'
-              style={{ marginRight: 5 }}
-            />
-            {item.location}
-          </Text>
-        </View>
-        <View style={styles.resCardImageView}>
-          <Image style={styles.resCardImage} source={{ uri: item.images[0] }} />
-        </View>
-        <View style={styles.resCardAdditionalInfo}>
-          <View style={styles.resCardAdditionalInfoLeft}>
-            <Text style={styles.resCardAdditionalInfoTitle}>
-              10:00 AM - 12:00 PM
-            </Text>
+    <>
+      {!isLoading ? (
+        <Loader />
+      ) : (
+        <ScrollView style={styles.root}>
+          <View style={styles.resCard}>
+            <View style={styles.resInfo}>
+              <Text style={styles.resTitle}>{item.title}</Text>
+              <Text style={styles.resSubTitle}>
+                <Ionicons
+                  name='ios-location-sharp'
+                  size={16}
+                  color='#DE3905'
+                  style={{ marginRight: 5 }}
+                />
+                {item.location}
+              </Text>
+            </View>
+            <View style={styles.resCardImageView}>
+              <Image
+                style={styles.resCardImage}
+                source={{ uri: item.images[0] }}
+              />
+            </View>
+            <View style={styles.resCardAdditionalInfo}>
+              <View style={styles.resCardAdditionalInfoLeft}>
+                <Text style={styles.resCardAdditionalInfoTitle}>
+                  10:00 AM - 12:00 PM
+                </Text>
+              </View>
+              <View style={styles.resCardAdditionalInfoRight}>
+                <Link style={styles.resCardAdditionalInfoRightLink}>
+                  Показать на карте
+                </Link>
+              </View>
+            </View>
           </View>
-          <View style={styles.resCardAdditionalInfoRight}>
-            <Link style={styles.resCardAdditionalInfoRightLink}>
-              Показать на карте
-            </Link>
+          <View style={styles.resCard}>
+            <View style={styles.resInfo}>
+              <Text style={styles.resTitle}>Меню</Text>
+            </View>
+            <View style={styles.cardsView}>
+              <View style={styles.card}>
+                {foods.map((food) => (
+                  <DetailMenuCard item={food} />
+                ))}
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    </ScrollView>
+        </ScrollView>
+      )}
+    </>
   );
 };
 
