@@ -14,8 +14,7 @@ export const RestaurantDetail = ({ navigation, route }) => {
   const loadFood = async () => {
     try {
       let response = await RestaurantsService.getFoodItems(item._id);
-      setIsLoading(true);
-      setFoods(response.data);
+      setFoods(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -25,12 +24,11 @@ export const RestaurantDetail = ({ navigation, route }) => {
 
   useEffect(() => {
     loadFood();
-    // console.log(item);
-  });
+  }, []);
 
   return (
     <>
-      {!isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <ScrollView style={styles.root}>
@@ -68,12 +66,17 @@ export const RestaurantDetail = ({ navigation, route }) => {
           </View>
           <View style={styles.resCard}>
             <View style={styles.resInfo}>
+              <Text style={styles.resTitle}>Бронь</Text>
+            </View>
+          </View>
+          <View style={styles.resCard}>
+            <View style={styles.resInfo}>
               <Text style={styles.resTitle}>Меню</Text>
             </View>
             <View style={styles.cardsView}>
               <View style={styles.card}>
                 {foods.map((food) => (
-                  <DetailMenuCard item={food} />
+                  <DetailMenuCard key={food._id} item={food} />
                 ))}
               </View>
             </View>
@@ -144,5 +147,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#DE3905',
     paddingRight: 20,
+  },
+  cardsView: {
+    paddingBottom: 20,
   },
 });

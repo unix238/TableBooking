@@ -21,7 +21,7 @@ export default class RestaurantsService {
         `http://localhost:8080/food/getRestaurantFood`,
         { params: { restaurant } }
       );
-      console.log('response.data: ', response.data);
+      return response.data;
     } catch (error) {
       console.error(error);
     }
