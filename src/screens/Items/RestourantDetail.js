@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from '../../components/UI/Link/Link';
 import RestaurantsService from '../../api/restaurantService';
 import DetailMenuCard from '../../components/UI/DetailMenuCard/DetailMenuCard';
 import { Loader } from '../../components/UI/Loader/Loader';
+import { FontAwesome } from '@expo/vector-icons';
 
 export const RestaurantDetail = ({ navigation, route }) => {
   const [item, setItem] = useState(route.params.item);
@@ -34,16 +42,22 @@ export const RestaurantDetail = ({ navigation, route }) => {
         <ScrollView style={styles.root}>
           <View style={styles.resCard}>
             <View style={styles.resInfo}>
-              <Text style={styles.resTitle}>{item.title}</Text>
-              <Text style={styles.resSubTitle}>
-                <Ionicons
-                  name='ios-location-sharp'
-                  size={16}
-                  color='#DE3905'
-                  style={{ marginRight: 5 }}
-                />
-                {item.location}
-              </Text>
+              <View style={styles.resInfoText}>
+                <Text style={styles.resTitle}>{item.title}</Text>
+                <Text style={styles.resSubTitle}>
+                  <Ionicons
+                    name='ios-location-sharp'
+                    size={16}
+                    color='#DE3905'
+                    style={{ marginRight: 5 }}
+                  />
+                  {item.location}
+                </Text>
+              </View>
+
+              <TouchableOpacity style={styles.resFavorite}>
+                <FontAwesome name='heart-o' size={34} color='red' />
+              </TouchableOpacity>
             </View>
             <View style={styles.resCardImageView}>
               <Image
@@ -101,8 +115,15 @@ const styles = StyleSheet.create({
   },
   resInfo: {
     display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  resInfoText: {
+    display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    width: '80%',
   },
   resSubTitle: {
     fontSize: 12,

@@ -11,6 +11,7 @@ import {
 import { SearchBar } from '../components/UI/SearchBar/SearchBar';
 import React, { useEffect, useState } from 'react';
 import { useRestaurants } from '../hooks/useRestaurants';
+import { Loader } from '../components/UI/Loader/Loader';
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -39,7 +40,7 @@ export const Restaurants = ({ navigation }) => {
       />
       <View style={styles.offer}>
         {isLoading ? (
-          <ActivityIndicator size='large' color='#DE3905' />
+          <Loader />
         ) : (
           <FlatList
             refreshControl={
