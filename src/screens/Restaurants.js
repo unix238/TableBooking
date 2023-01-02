@@ -52,7 +52,7 @@ export const Restaurants = ({ navigation }) => {
                   navigation.navigate('detail', { item });
                 }}
               >
-                <Image style={styles.image} source={item.image} />
+                <Image style={styles.image} source={{ uri: item.images[0] }} />
                 <Text>{item.title}</Text>
               </TouchableOpacity>
             )}

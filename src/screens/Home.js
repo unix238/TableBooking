@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { useAuth } from '../hooks/useAuth';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,10 +16,19 @@ import { SearchBar } from '../components/UI/SearchBar/SearchBar';
 import { AntDesign } from '@expo/vector-icons';
 
 import { useRestaurants } from '../hooks/useRestaurants';
-
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 export const Home = ({ navigation }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    useRestaurants(setRestaurants, setIsLoading);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     useRestaurants(setRestaurants, setIsLoading);
@@ -35,7 +45,12 @@ export const Home = ({ navigation }) => {
           }}
         />
       </View>
-      <ScrollView style={styles.main}>
+      <ScrollView
+        style={styles.main}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {isLoading ? (
           <ActivityIndicator size='large' color='#DE3905' />
         ) : (
@@ -61,7 +76,12 @@ export const Home = ({ navigation }) => {
                 keyExtractor={(item, index) => index.toString()}
               />
             </View>
-            <TouchableOpacity style={styles.new}>
+            <TouchableOpacity
+              style={styles.new}
+              onPress={() => {
+                navigation.navigate('Restaurants');
+              }}
+            >
               <View style={styles.newText}>
                 <Text style={styles.newTitle}>Новые Рестораны</Text>
                 <Text style={styles.newSubTitle}>Новые рестораны</Text>
@@ -105,7 +125,12 @@ export const Home = ({ navigation }) => {
                 keyExtractor={(item, index) => index.toString()}
               />
             </View>
-            <TouchableOpacity style={styles.new}>
+            <TouchableOpacity
+              style={styles.new}
+              onPress={() => {
+                navigation.navigate('Restaurants');
+              }}
+            >
               <View style={styles.newText}>
                 <Text style={styles.newTitle}>Забронировать столик</Text>
                 <Text style={styles.newSubTitle}>Заброниоовать столик</Text>
@@ -115,43 +140,44 @@ export const Home = ({ navigation }) => {
                 <AntDesign name='right' size={24} color='black' />
               </View>
             </TouchableOpacity>
-
-            {restaurants.map((item) => {
-              return (
-                <View style={styles.resCard} key={`listmain${item._id}`}>
-                  <View style={styles.resCardLeft}>
-                    <Image
-                      style={styles.resCardImage}
-                      source={{ uri: item.images[0] }}
-                    />
-                  </View>
-                  <View style={styles.resCardRight}>
-                    <View style={styles.resCardTop}>
-                      <Text style={styles.resCardTitle}>{item.title}</Text>
+            <View style={styles.res}>
+              {restaurants.map((item) => {
+                return (
+                  <View style={styles.resCard} key={`listmain${item._id}`}>
+                    <View style={styles.resCardLeft}>
+                      <Image
+                        style={styles.resCardImage}
+                        source={{ uri: item.images[0] }}
+                      />
                     </View>
-                    <View style={styles.resCardBottom}>
-                      <View style={styles.resCardBottomLeft}>
-                        <Ionicons
-                          name='ios-location-sharp'
-                          size={16}
-                          color='#DE3905'
-                          style={{ marginRight: 5 }}
-                        />
-                        <Text>{item.location}</Text>
+                    <View style={styles.resCardRight}>
+                      <View style={styles.resCardTop}>
+                        <Text style={styles.resCardTitle}>{item.title}</Text>
                       </View>
-                      <TouchableOpacity
-                        style={styles.resCardBottomRight}
-                        onPress={() => {
-                          navigation.navigate('detail', { item });
-                        }}
-                      >
-                        <Text style={styles.buttonText}>Бронь</Text>
-                      </TouchableOpacity>
+                      <View style={styles.resCardBottom}>
+                        <View style={styles.resCardBottomLeft}>
+                          <Ionicons
+                            name='ios-location-sharp'
+                            size={16}
+                            color='#DE3905'
+                            style={{ marginRight: 5 }}
+                          />
+                          <Text>{item.location}</Text>
+                        </View>
+                        <TouchableOpacity
+                          style={styles.resCardBottomRight}
+                          onPress={() => {
+                            navigation.navigate('detail', { item });
+                          }}
+                        >
+                          <Text style={styles.buttonText}>Бронь</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
-                </View>
-              );
-            })}
+                );
+              })}
+            </View>
           </>
         )}
       </ScrollView>
@@ -192,6 +218,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    width: '90%',
   },
   newTitle: {
     fontSize: 16,
@@ -244,9 +271,14 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     fontWeight: '400',
   },
+  res: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   resCard: {
-    marginLeft: 18,
-    width: 380,
+    width: '90%',
     height: 88,
     borderRadius: 20,
     padding: 12,

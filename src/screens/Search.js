@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,47 +7,32 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-} from "react-native";
-import offer from "../static/img/res3.jpeg";
+} from 'react-native';
 
-import { useAuth } from "../hooks/useAuth";
-import { EvilIcons } from "@expo/vector-icons";
+import { useRestaurants } from '../hooks/useRestaurants';
+
+import { useAuth } from '../hooks/useAuth';
+import { EvilIcons } from '@expo/vector-icons';
+import { Loader } from '../components/UI/Loader/Loader';
 
 export const Search = ({ navigation }) => {
-  const [input, setInput] = useState("");
-
-  const [data, setData] = useState([
-    {
-      id: "1",
-      name: "Restaurant 1",
-      image: offer,
-    },
-    {
-      id: "2",
-      name: "Restaurant 2",
-      image: offer,
-    },
-    {
-      id: "3",
-      name: "Restaurant 3",
-      image: offer,
-    },
-    {
-      id: "4",
-      name: "Restaurant 4",
-      image: offer,
-    },
-  ]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [restaurants, setRestaurants] = useState([]);
 
   const [filteredData, setFilteredData] = useState([]);
 
   const findHandler = () => {
     setFilteredData(
-      data.filter((item) =>
-        item.name.toLowerCase().includes(input.toLowerCase())
+      restaurants.filter((item) =>
+        item.title.toLowerCase().includes(input.toLowerCase())
       )
     );
   };
+
+  useEffect(() => {
+    useRestaurants(setRestaurants, setIsLoading);
+  }, []);
 
   useEffect(() => {
     findHandler();
@@ -60,8 +45,11 @@ export const Search = ({ navigation }) => {
       <View style={styles.searchBar}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Найти"
+          placeholder='Найти'
           value={input}
+          autoCompleteType='off'
+          autoComplete='off'
+          autoCorrect={false}
           onChange={(e) => {
             setInput(e.nativeEvent.text);
           }}
@@ -69,27 +57,33 @@ export const Search = ({ navigation }) => {
           autoFocus={true}
         />
         <TouchableOpacity onPress={findHandler}>
-          <EvilIcons name="search" size={40} color={"#DE3905"} />
+          <EvilIcons name='search' size={40} color={'#DE3905'} />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={filteredData}
-        style={{height: "100%"}}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("detail", { item });
-              }}
-            >
-              <Image style={styles.card} source={item.image} />
-              <Text>{item.name}</Text>
-            </TouchableOpacity>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : filteredData.length === 0 ? (
+        <Text style={styles.notFound}>Ничего не найдено</Text>
+      ) : (
+        <FlatList
+          data={filteredData}
+          style={{ height: '100%' }}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('detail', { item });
+                }}
+              >
+                <Image style={styles.card} source={{ uri: item.images[0] }} />
+                <Text>{item.title}</Text>
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 };
@@ -101,17 +95,17 @@ const styles = StyleSheet.create({
     paddingVertical: 65,
   },
   searchBar: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   searchInput: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "#eaeaea",
-    width: "85%",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#eaeaea',
+    width: '85%',
     paddingVertical: 14,
     paddingHorizontal: 18,
     borderRadius: 10,
@@ -121,5 +115,11 @@ const styles = StyleSheet.create({
     height: 130,
     marginTop: 30,
     borderRadius: 10,
+  },
+  notFound: {
+    fontSize: 20,
+    color: '#DE3905',
+    marginTop: 30,
+    textAlign: 'center',
   },
 });

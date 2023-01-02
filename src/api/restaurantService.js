@@ -17,10 +17,9 @@ export default class RestaurantsService {
 
   static async getFoodItems(restaurant) {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/food/getRestaurantFood`,
-        { params: { restaurant } }
-      );
+      const response = await axios.get(`${URL}/food/getRestaurantFood`, {
+        params: { restaurant },
+      });
       return response.data;
     } catch (error) {
       console.error(error);
